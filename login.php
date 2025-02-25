@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
     
     // Si l'utilisateur existe, le rediriger vers la page d'accueil
-    if ($result->num_rows > 0) {
+    if ($result->num_rows == 0) {
         $_SESSION["username"] = $username;
         header("Location: index.php");
         exit();
