@@ -11,6 +11,7 @@ $host = "localhost:3360";
 $user = "root"; // a remplacer par son nom d'utilisateur MySQL
 $pass = "root"; // a remplacer par son mot de passe MySQL
 $dbname = "auth_db";
+$encoding = PASSWORD_ARGON2I;
 
 // Connexion à la base de donnée
 $conn = new mysqli($host, $user, $pass, $dbname);
@@ -27,7 +28,7 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
     $username = $_POST["username"];
-    $password = $_POST["password"];
+    $password = password_hash($_POST["password"], $encoding);
     
     // Requête SQL pour insérer un nouvel utilisateur dans la base de données
     $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
