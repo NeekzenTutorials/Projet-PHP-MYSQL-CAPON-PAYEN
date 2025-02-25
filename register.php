@@ -1,4 +1,4 @@
-<!------------------------ login.php ------------------------>
+<!------------------------ register.php ------------------------>
 
 <!------------ php ------------>
 
@@ -23,27 +23,24 @@ if ($conn->connect_error) {
     die("Connexion échouée: " . $conn->connect_error);
 }
 
- // Verifier si le formulaire a été envoyé
+// Verifier si le formulaire a été envoyé
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
     $username = $_POST["username"];
     $password = $_POST["password"];
     
-    // Requête SQL pour vérifier si l'utilisateur existe dans la base de données
-    $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    // Requête SQL pour insérer un nouvel utilisateur dans la base de données
+    $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
     
-    // Si l'utilisateur existe, le rediriger vers la page d'accueil
-    if ($result->num_rows > 0) {
-        $_SESSION["username"] = $username;
-        header("Location: index.php");
+    if ($stmt->execute()) {
+        // Si l'insertion est réussie, rediriger vers la page de connexion avec un message de succès
+        header("Location: login.php?success=1");
         exit();
     } else {
         // Sinon, afficher un message d'erreur
-        echo "Identifiants incorrects.";
+        echo "Erreur lors de la création du compte.";
     }
 }
 ?>
@@ -54,24 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Connexion</title>
+    <title>Créer un compte</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <h2>Connexion</h2>
-    <?php
-    // Afficher un message de succès si l'utilisateur vient de créer un compte
-    if (isset($_GET['success']) && $_GET['success'] == 1) {
-        echo "<p style='color: green;'>Compte créé avec succès.</p>";
-    }
-    ?>
+    <h2>Créer un compte</h2>
     <form method="POST">
         <label>Nom d'utilisateur:</label>
         <input type="text" name="username" required><br>
         <label>Mot de passe:</label>
         <input type="password" name="password" required><br>
-        <button type="submit">Se connecter</button>
+        <button type="submit">Créer un compte</button>
     </form>
-    <p>Pas encore de compte ? <a href="register.php">Créer un compte</a></p>
 </body>
 </html>
