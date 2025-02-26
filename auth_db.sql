@@ -37,8 +37,6 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'admin', '123'),
 
 --
 -- Indexes for dumped tables
