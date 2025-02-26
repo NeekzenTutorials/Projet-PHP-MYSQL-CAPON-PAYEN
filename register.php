@@ -24,6 +24,8 @@ if ($conn->connect_error) {
     die("Connexion échouée: " . $conn->connect_error);
 }
 
+$message = "";
+
 // Verifier si le formulaire a été envoyé
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
@@ -35,13 +37,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $username, $password);
     
-    if ($stmt->execute()) {
-        // Si l'insertion est réussie, rediriger vers la page de connexion avec un message de succès
-        header("Location: login.php?success=1");
-        exit();
-    } else {
-        // Sinon, afficher un message d'erreur
-        echo "Erreur lors de la création du compte.";
+    try {
+        if ($stmt->execute()) {
+            // Si l'insertion est réussie, rediriger vers la page de connexion avec un message de succès
+            header("Location: login.php?success=1");
+            exit();
+        }
+    } catch (mysqli_sql_exception $e) {
+        // Vérifier si l'erreur est due à la contrainte d'unicité sur le nom d'utilisateur
+        if ($stmt->errno == 1062) {
+            $message = "Le nom d'utilisateur est déjà utilisé.";
+        } else {
+            // Sinon, afficher un message d'erreur générique
+            $message = "Erreur lors de la création du compte.";
+        }
     }
 }
 ?>
@@ -57,6 +66,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h2>Créer un compte</h2>
+    <?php if ($message): ?>
+        <p style="color: green;"><?php echo $message; ?></p>
+    <?php endif; ?>
     <form method="POST">
         <label>Nom d'utilisateur:</label>
         <input type="text" name="username" required><br>
