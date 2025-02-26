@@ -7,7 +7,7 @@
 session_start();
 
 // Informations de connexion à la base de données MySQL
-$host = "localhost:3360";
+$host = "localhost";
 $user = "root"; // a remplacer par son nom d'utilisateur MySQL
 $pass = "root"; // a remplacer par son mot de passe MySQL
 $dbname = "auth_db";

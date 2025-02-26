@@ -7,7 +7,7 @@
 session_start();
 
 // Informations de connexion à la base de données MySQL
-$host = "localhost:3360";
+$host = "localhost";
 $user = "root"; // a remplacer par son nom d'utilisateur MySQL
 $pass = "root"; // a remplacer par son mot de passe MySQL
 $dbname = "auth_db";
@@ -28,20 +28,27 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Récupérer les données du formulaire
     $username = $_POST["username"];
-    $password = password_hash($_POST["password"], $encoding);
+    $password = $_POST["password"];
     
     // Requête SQL pour vérifier si l'utilisateur existe dans la base de données
-    $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    $sql = "SELECT * FROM users WHERE username = ?"; // Récupération de l'utilisateur par son nom d'utilisateur
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
     
     // Si l'utilisateur existe, le rediriger vers la page d'accueil
     if ($result->num_rows > 0) {
-        $_SESSION["username"] = $username;
-        header("Location: index.php");
-        exit();
+        $user = $result->fetch_assoc();
+        // Verification du mot de passe haché en base de données et validation si le mot de passe est correct
+        if (password_verify($password, $user['password'])) { 
+            $_SESSION["username"] = $username;
+            header("Location: index.php");
+            exit();
+        }
+        else {
+            echo "Identifiants incorrects.";
+        }
     } else {
         // Sinon, afficher un message d'erreur
         echo "Identifiants incorrects.";
