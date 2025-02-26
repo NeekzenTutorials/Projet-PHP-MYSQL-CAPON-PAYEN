@@ -19,7 +19,7 @@ Projet de sécurisation en maintenance applicatif
 
 3. Modifiez les informations de connexion à la base de données si nécessaire dans les fichiers `index.php` et `login.php`.
 
-4. Lancez le serveur web.
+4. Lancez le serveur web (changez le chemin si necessaire).
 
-5. Accédez à l'application via votre navigateur web.
+5. Accédez à l'application via votre navigateur web. (localhost)
 
