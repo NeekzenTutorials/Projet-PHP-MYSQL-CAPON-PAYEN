@@ -6,7 +6,7 @@ Projet de sécurisation en maintenance applicatif
 
 - PHP
 - MySQL
-- Serveur web (Apache, Nginx, etc.)
+- Serveur web (MAMP, XAMP, ...)
 
 ## Installation
 
