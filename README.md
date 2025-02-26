@@ -21,5 +21,5 @@ Projet de sécurisation en maintenance applicatif
 
 4. Lancez le serveur web (changez le chemin si necessaire).
 
-5. Accédez à l'application via votre navigateur web. (localhost)
+5. Accédez à l'application via votre navigateur web.
 
